@@ -36,6 +36,7 @@ jobs:
   docker-kiosk:
     name: Build, Self-Test & Publish Kiosk Image
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7.0.1
