@@ -105,9 +105,16 @@ EOF
 }
 
 run_self_test() {
-  echo "[vibemis-kiosk] Running headless self-test..."
+  echo "[vibemis-kiosk] Running headless self-test via Xvfb..."
   python3 /usr/local/bin/merge_ini.py --self-test
-  timeout 30s env QT_QPA_PLATFORM=offscreen /opt/vibemis/AppRun --help
+  Xvfb :99 -screen 0 1280x720x24 -nolisten tcp &
+  local xvfb_pid=$!
+  sleep 1
+  local rc=0
+  DISPLAY=:99 QT_QPA_PLATFORM=xcb timeout 30s /opt/vibemis/AppRun --help || rc=$?
+  kill "${xvfb_pid}" 2>/dev/null || true
+  wait "${xvfb_pid}" 2>/dev/null || true
+  return "${rc}"
 }
 
 main() {
