@@ -124,6 +124,7 @@ main() {
 
   if [[ "${1:-}" == "--self-test" ]] || [[ ! -d /dev/dri ]]; then
     run_self_test
+    exit $?
   fi
 
   wait_for_display
